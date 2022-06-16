@@ -2,6 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./index.js",
@@ -12,6 +13,6 @@
   "author": "Margarita",
   "license": "ISC",
   "devDependencies": {
-    "dead-server": "^1.0.6"
+    "nodemon": "^2.0.16"
   }
 }
