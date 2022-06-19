@@ -9,7 +9,6 @@ app.init = () => {
     // prisijungti prie duomenu bazes (DB)
 
     // paleidziam pacio serverio logika (perduodame prisijungima prie DB)
-
     server.init();
 
     // paleidzia papildomus nuolatinius procesus:
