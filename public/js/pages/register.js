@@ -1,4 +1,3 @@
-
 import { IsValid } from "../components/IsValid.js";
 
 const formDOM = document.querySelector('.form');
@@ -7,7 +6,7 @@ const submitDOM = formDOM.querySelector('button');
 const notificationsDOM = formDOM.querySelector('.notifications');
 
 if (submitDOM) {
-    submitDOM.addEventListener('click', (e) => {
+    submitDOM.addEventListener('click', async (e) => {
         e.preventDefault();
 
         notificationsDOM.classList.remove('show');
@@ -27,13 +26,36 @@ if (submitDOM) {
                 }
             } else {
                 data[inputDOM.name] = inputDOM.checked;
+                if (!inputDOM.checked) {
+                    errors.push('Privaloma sutikti su TOS');
+                }
             }
+        }
+
+        if (inputsDOM[2].value !== inputsDOM[3].value) {
+            errors.push('Slaptazodziai nesutampa');
         }
 
         if (errors.length) {
             notificationsDOM.classList.add('show');
             // notificationsDOM.innerHTML = errors.map(e => `<p>${e}.</p>`).join('');
             notificationsDOM.innerText = errors.join('.\n') + '.';
+        } else {
+            delete data.repass;
+            delete data.tos;
+
+            async function postData() {
+                const response = await fetch(formDOM.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                });
+                const res = await response.json();
+            }
+
+            console.log(res);
         }
 
         // tikriname ar laukai ne tusti

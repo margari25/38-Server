@@ -1,4 +1,5 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
+import config from '../config.js;'
 
 class PageRegister extends PageTemplate {
     constructor(data) {
@@ -8,6 +9,13 @@ class PageRegister extends PageTemplate {
     }
 
     mainHTML() {
+        const isDev = config.name === 'dev'
+        const formValues = {
+            fullname: isDev ? 'Name Lastname' : '',
+            email: isDev ? 'name@last.com' : '',
+            pass: isDev ? 'somepassword' : '',
+            repass: isDev ? 'somepassword' : '',
+        }
         return `<div class="row">
                     <h1>Register</h1>
                     <p>Register to get exited!</p>
@@ -16,7 +24,7 @@ class PageRegister extends PageTemplate {
 
                         <label for="fullname">Fullname</label>
                         <input id="fullname" name="fullname" data-validation="fullname" type="text" placeholder="Enter value..."
-                                autocomplete="name" required autofocus>
+                                autocomplete="name" required autofocus value=${fullname}>
                         
                         <label for="email">Email</label>
                         <input id="email" name="email" data-validation="email" type="email" placeholder="Enter value..."
