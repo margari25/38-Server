@@ -9,20 +9,20 @@ if (submitDOM) {
     submitDOM.addEventListener('click', async (e) => {
         e.preventDefault();
 
-        notificationsDOM.classList.remove('show');
+        notificationsDOM.classList.remove('show'); //paslepiam visas klaidas
 
-        const data = {};
-        const errors = [];
+        const data = {}; //kaupiam duom
+        const errors = []; // kaupiam klaidas
 
         for (const inputDOM of inputsDOM) {
             if (inputDOM.type !== 'checkbox') {
-                const rule = inputDOM.dataset.validation;
-                const [err, msg] = IsValid[rule](inputDOM.value);
+                const rule = inputDOM.dataset.validation; //issitraukiam validuoj. funkc.pav.
+                const [err, msg] = IsValid[rule](inputDOM.value); // grazina klaida, jei istiko klaida
 
                 if (err) {
-                    errors.push(msg);
+                    errors.push(msg); //jei istiko klaida- ja kaupiam masyve
                 } else {
-                    data[inputDOM.name] = inputDOM.value;
+                    data[inputDOM.name] = inputDOM.value; //jei  nera klaidos, kaupiam rezultata
                 }
             } else {
                 data[inputDOM.name] = inputDOM.checked;
@@ -39,21 +39,21 @@ if (submitDOM) {
         if (errors.length) {
             notificationsDOM.classList.add('show');
             // notificationsDOM.innerHTML = errors.map(e => `<p>${e}.</p>`).join('');
-            notificationsDOM.innerText = errors.join('.\n') + '.';
+            notificationsDOM.innerText = errors.join('.\n') + '.'; //jei radom klaidu - parodom
         } else {
             delete data.repass;
             delete data.tos;
 
-            async function postData() {
-                const response = await fetch(formDOM.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data),
-                });
-                const res = await response.json();
-            }
+            // async/await
+
+            const response = await fetch(formDOM.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            });
+            const res = await response.json();
 
             console.log(res);
         }
