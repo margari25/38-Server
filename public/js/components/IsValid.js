@@ -1,25 +1,14 @@
-//sutampa su Register.js const validationRule = inputDOM.dataset.validation;
-// error-first approach
-
 class IsValid {
-    static fullname(str) {  //str stringas tiesiog name
+    static fullname(str) {
         if (str === undefined) {
-            return [true, 'Neduotas parametras']
+            return [true, 'Neduotas parametras'];
         }
-        // ar buvo gauta klaida 
         if (typeof str !== 'string') {
-            // true taip buvo klaida ir kokia klaida parasoma 
-            return [true, 'Netinkamas tipas, turi buti "string"']
+            return [true, 'Netinkamas tipas, turi buti "string"'];
         }
 
-        const maxSize = 100;
-        if (str.length > maxSize) {
-            return [true, `Per ilgas pilnas vardas, negali virsyti ${maxSize} simboliu`];
-        }
-
-        //pirma validacija formatavimas iiiiir tada funkcijos aprasancios visus scenarijus
         str = str.trim().replace(/\s+/g, ' ');
-        // str = str.trim().replaceAll('  ', ' '); // nes pas mane sitas neveikia :(
+        // str = str.trim().replaceAll('  ', ' '); // gali veikti kitose versijose
 
         const minWordsCount = 2;
         const minWordLength = 2;
@@ -64,15 +53,9 @@ class IsValid {
         if (typeof str !== 'string') {
             return [true, 'Netinkamas tipas, turi buti "string"'];
         }
+        str = str.trim();
         if (str === '') {
             return [true, 'Neivestas email adresas'];
-        }
-
-        str = str.trim();
-
-        const maxSize = 100;
-        if (str.length > maxSize) {
-            return [true, `Per ilgas email, negali virsyti ${maxSize} simboliu`];
         }
 
         const parts = str.split('@');
@@ -94,7 +77,7 @@ class IsValid {
 
         const allowedSymbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.';
         if (locale[0] === '.'
-            || !isNaN(+locale[0])) {
+            || !isNaN(+locale[0])) { //'+'konvertuoja str i skaiciu
             return [true, 'El pastas turi prasideti raide'];
         }
         for (const symbol of locale) {
@@ -118,86 +101,12 @@ class IsValid {
                 return [true, `Uz @ neleistinas naudoti simbolis "${symbol}"`];
             }
         }
+
         return [false, 'OK'];
     }
 
-    //simple varijantas
-    // static email(str) {
-    //     if (str === undefined) {
-    //         return [true, 'Neduotas parametras'];
-    //     }
-
-    //     if (typeof str !== 'string') {
-    //         return [true, 'Netinkamas tipas, turi buti "string"']
-    //     }
-
-    //     str = str.trim();
-
-    //     const minWordLength = 6;
-    //     if (str.length < minWordLength) {
-    //         return [true, `Per trumpas , turi buti minimum ${minWordLength} simboliai`];
-    //     }
-
-    //     const allowedEmailSymbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.@';
-
-    //     let simbolCount = 0;
-
-    //     //neliesti
-    //     for (const simbol of str) {
-    //         if (simbol === '@') {
-    //             simbolCount++
-    //         }
-    //     }
-
-    //     if (simbolCount === 0 || simbolCount > 1) {
-    //         return [true, 'email turi tureti tik viena @ simboli']
-    //     }
-
-    //     if (str[0] === '@') {
-    //         return [true, 'truksta teksto pries @ simbolio']
-    //     }
-
-    //     // if (str[str.length - 1] === '@') {
-    //     //     return [true, 'truksta teksto po @ simbolio']
-    //     // }
-    //     if (str.at(-1) === '@') {
-    //         return [true, 'truksta teksto po @ simbolio']
-    //     }
-
-    //     for (const simbol of str) {
-    //         if (!allowedEmailSymbols.includes(simbol)) {
-    //             return [true, `neleistinas simbolis - ${simbol}`]
-    //         }
-    //     }
-
-    //     const splitedEmailStr = str.split('@')[1]
-
-    //     let dotCount = 0;
-
-    //     for (const simbolDot of splitedEmailStr) {
-    //         if (simbolDot === '.') {
-    //             dotCount++
-    //         }
-    //     }
-
-    //     if (dotCount === 0) {
-    //         return [true, 'netinkamas domenas']
-    //     }
-
-    //     if (str.at(-2) === '.' || str.at(-1) === '.') {
-    //         return [true, 'el. pastas turi baigtis bent dvejomis raidemis']
-    //     }
-
-    //     if (str.includes('..')) {
-    //         return [true, 'du taskai is eiles']
-    //     }
-
-    //     return [false, 'OK'];
-    // }
-
     static password(str) {
         const minPasswordLength = 12;
-        const maxPasswordLength = 120;
 
         if (typeof str !== 'string') {
             return [true, 'Netinkamas tipas, turi buti "string"'];
@@ -205,21 +114,9 @@ class IsValid {
         if (str.length < minPasswordLength) {
             return [true, `Per trumpas password tekstas, turi buti minimum ${minPasswordLength} simboliai`];
         }
-        if (str.length > maxPasswordLength) {
-            return [true, `Per ilgas password tekstas, negali virsyti ${maxPasswordLength} simboliai`];
-        }
 
         return [false, 'OK'];
     }
 }
 
 export { IsValid }
-
-// pavyzdukas
-// 1petras@mail.com - blogas
-// !isNaN(+locale[0])
-// !isNaN(+'1petras'[0])
-// !isNaN(+'1')
-// !isNaN(1)
-// !false
-// true

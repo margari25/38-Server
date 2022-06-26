@@ -1,34 +1,86 @@
+import { IsValid } from "../lib/is-valid/IsValid.js";
+
 const handler = {};
 
-handler.account = (data, res) => {
+handler.account = (data, res) => { //kliento ketinimas: get, post etc.
     const acceptableMethods = ['get', 'post', 'put', 'delete'];
 
     if (acceptableMethods.includes(data.httpMethod)) {
-        return handler._account[data.httpMethod](data, res);
+        const httpMethodFunc = handler._innerMethods[data.httpMethod];
+        return httpMethodFunc(data, res);
     }
 
     return res.end(JSON.stringify('Tavo norimas HTTPmethod yra nepalaikomas'));
 }
 
-handler._account = {};
+handler._innerMethods = {};
 
 // GET
-handler._account.get = (data, res) => {
+handler._innerMethods.get = (data, res) => {
     return res.end(JSON.stringify('Account: get'));
 }
 
-// POST
-handler._account.post = (data, res) => {
-    return res.end(JSON.stringify('Account: post'));
+// POST - sukuriame paskyra
+handler._innerMethods.post = (data, res) => {
+    const { payload } = data;
+
+    /*
+    1) patikrinti, ar teisinga info (payload):
+        - email
+        - pass
+        - fullname
+        - isitikinti, jog atejusiame objekte nera kitu key's apart: email, fullname ir password
+    */
+
+    const allowedKeys = ['fullname', 'email', 'pass'];
+    if (Object.keys(payload).length > allowedKeys.length) {
+        return res.end(JSON.stringify('Atsiustuose duomenyse gali buti tik: fullname, email ir pass'));
+    }
+
+    const { fullname, email, pass } = payload;
+
+    const [fullnameErr, fullnameMsg] = IsValid.fullname(fullname);
+    if (fullnameErr) {
+        return res.end(JSON.stringify(fullnameMsg));
+    }
+
+    const [emailErr, emailMsg] = IsValid.email(email);
+    if (emailErr) {
+        return res.end(JSON.stringify(emailMsg));
+    }
+
+    const [passErr, passMsg] = IsValid.password(pass);
+    if (passErr) {
+        return res.end(JSON.stringify(passMsg));
+    }
+
+    /*
+    2) ar toks vartotojas jau egzistuoja
+        - jei taip - error
+        - jei ne - tęsiam
+    */
+
+
+
+    /*
+    3) issaugoti duomenis (payload)
+        - jei pavyko - paskyra sukurta
+            - siunciam patvirtinimo laiska
+        - jei nepavyko - error
+    */
+
+    console.log(payload);
+
+    return res.end(JSON.stringify('Paskyra sukurta sekmingai'));
 }
 
 // PUT (kapitalinis info pakeistimas) / PATCH (vienos info dalies pakeitimas)
-handler._account.put = (data, res) => {
+handler._innerMethods.put = (data, res) => {
     return res.end(JSON.stringify('Account: put'));
 }
 
 // DELETE
-handler._account.delete = (data, res) => {
+handler._innerMethods.delete = (data, res) => {
     return res.end(JSON.stringify('Account: delete'));
 }
 

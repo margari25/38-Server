@@ -44,9 +44,8 @@ if (submitDOM) {
             delete data.repass;
             delete data.tos;
 
-            // async/await
 
-            const response = await fetch(formDOM.action, {
+            const response = await fetch(formDOM.action, { //siunciam duom. i backend
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,6 +56,8 @@ if (submitDOM) {
 
             console.log(res);
         }
+
+
 
         // tikriname ar laukai ne tusti
         // tikriname ar geros vertes:
