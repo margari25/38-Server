@@ -1,10 +1,3 @@
-// node ./index.js                      //dev
-// NODE_ENV=dev node ./indexedDB.js     //dev
-// NODE_ENV=prod node ./index.js        //prod
-// NODE_ENV=test node ./index.js        //test
-// NODE_ENV=kazkas node ./index.js      //kazkas
-
-
 const config = {};
 
 config.dev = {
@@ -21,7 +14,8 @@ config.dev = {
     cache: {
         default: 0,
         periods: {},
-    }
+    },
+    hashingSecret: '548efr525arf5d5a4f5fd4ad',
 }
 
 config.prod = {
@@ -53,7 +47,8 @@ config.prod = {
             pdf: 60 * 60,
             json: 60 * 60,
         },
-    }
+    },
+    hashingSecret: '5t48gs5fres4g5fd2f64wt8g52g65t8wy4ey5htui4752r88e4fk5jdgr487fh51f5h84fk548trsg',
 }
 
 const nodeEnv = process.env.NODE_ENV;
