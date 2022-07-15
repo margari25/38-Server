@@ -9,20 +9,20 @@ if (submitDOM) {
     submitDOM.addEventListener('click', async (e) => {
         e.preventDefault();
 
-        notificationsDOM.classList.remove('show'); //paslepiam visas klaidas
+        notificationsDOM.classList.remove('show');
 
-        const data = {}; //kaupiam duom
-        const errors = []; // kaupiam klaidas
+        const data = {};
+        const errors = [];
 
         for (const inputDOM of inputsDOM) {
             if (inputDOM.type !== 'checkbox') {
-                const rule = inputDOM.dataset.validation; //issitraukiam validuoj. funkc.pav.
-                const [err, msg] = IsValid[rule](inputDOM.value); // grazina klaida, jei istiko klaida
+                const rule = inputDOM.dataset.validation;
+                const [err, msg] = IsValid[rule](inputDOM.value);
 
                 if (err) {
-                    errors.push(msg); //jei istiko klaida- ja kaupiam masyve
+                    errors.push(msg);
                 } else {
-                    data[inputDOM.name] = inputDOM.value; //jei  nera klaidos, kaupiam rezultata
+                    data[inputDOM.name] = inputDOM.value;
                 }
             } else {
                 data[inputDOM.name] = inputDOM.checked;
@@ -39,25 +39,41 @@ if (submitDOM) {
         if (errors.length) {
             notificationsDOM.classList.add('show');
             // notificationsDOM.innerHTML = errors.map(e => `<p>${e}.</p>`).join('');
-            notificationsDOM.innerText = errors.join('.\n') + '.'; //jei radom klaidu - parodom
+            notificationsDOM.innerText = errors.join('.\n') + '.';
         } else {
             delete data.repass;
             delete data.tos;
 
-
-            const response = await fetch(formDOM.action, { //siunciam duom. i backend
+            const response = await fetch(formDOM.action, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             });
-            const res = await response.json();
+            const resBody = await response.json();
 
-            console.log(res);
+            switch (resBody.msgType) {
+                case 'error':
+                    notificationsDOM.innerText = resBody.msg;
+                    notificationsDOM.classList.remove('success');
+                    notificationsDOM.classList.add('show');
+                    break;
+
+                case 'success':
+                    notificationsDOM.innerText = resBody.msg;
+                    notificationsDOM.classList.add('success', 'show');
+                    break;
+
+                case 'redirect':
+                    location.href = resBody.href;
+                    break;
+
+                default:
+                    console.log('Toks msgType nerastas:', resBody.msgType);
+                    break;
+            }
         }
-
-
 
         // tikriname ar laukai ne tusti
         // tikriname ar geros vertes:
