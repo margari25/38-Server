@@ -1,20 +1,20 @@
 {
-  "name": "server",
+  "name": "38-grupe-server",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js",
-    "prod": "",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
-    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --passWithNoTests"
+      "dev": "nodemon ./index.js",
+      "prod": "NODE_ENV=prod node .",
+      "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
+      "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config ./jest.coverage.config.js --watchAll --passWithNoTests"
   },
   "keywords": [],
-  "author": "Margarita",
-  "license": "ISC",
+  "author": "Rimantas",
+  "license": "MIT",
   "devDependencies": {
-    "jest": "^28.1.1",
-    "nodemon": "^2.0.16"
+      "jest": "^28.1.1",
+      "nodemon": "^2.0.16"
   }
 }

@@ -9,7 +9,7 @@ class PageRegister extends PageTemplate {
     }
 
     mainHTML() {
-        const isDev = config.name === 'dev'; //NODE_ENV=prod node .
+        const isDev = config.name === 'dev';
         const formValues = {
             fullname: isDev ? 'Chuck Norris' : '',
             email: isDev ? 'chuck@norris.com' : '',
